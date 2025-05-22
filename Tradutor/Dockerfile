@@ -1,0 +1,22 @@
+FROM python:3.10-slim
+
+# Instala pacotes de sistema necessários
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    git \
+    cmake \
+    build-essential \
+    pkg-config \
+    && apt-get clean
+
+# Define diretório da aplicação
+WORKDIR /app
+COPY . /app
+
+# Instala pacotes Python
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+
+# Expõe a porta e roda o app
+EXPOSE 8080
+CMD ["streamlit", "run", "app.py", "--server.port=8080", "--server.enableCORS=false"]
